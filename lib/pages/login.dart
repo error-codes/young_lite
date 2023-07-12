@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // class LoginPage extends StatefulWidget {
 //   const LoginPage({super.key});
@@ -37,7 +38,7 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  bool _showPassword = false;
+  bool _blindfold = true;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +69,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               color: const Color(0xFFEEEEEE),
             ),
             child: TextField(
-              obscureText: _showPassword,
+              obscureText: _blindfold,
               style: const TextStyle(
                 color: Color(0xFF818181),
               ),
@@ -79,11 +80,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                 suffixIcon: IconButton(
                   onPressed: () {
                     setState(() {
-                      _showPassword = !_showPassword;
+                      _blindfold = !_blindfold;
                     });
                   },
                   icon: Icon(
-                      _showPassword ? Icons.visibility : Icons.visibility_off),
+                      _blindfold ? Icons.visibility : Icons.visibility_off),
                 ),
               ),
             ),
