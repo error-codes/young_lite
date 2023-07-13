@@ -53,7 +53,8 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
             child: const TextField(
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
+                contentPadding:
+                    EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
                 hintText: '请输入用户名',
                 border: InputBorder.none,
               ),
@@ -62,7 +63,9 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ),
           ),
-          const SizedBox(height: 8.0,),
+          const SizedBox(
+            height: 8.0,
+          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
@@ -74,7 +77,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                 color: Color(0xFF818181),
               ),
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
+                contentPadding:
+                    const EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
                 hintText: '请输入密码',
                 border: InputBorder.none,
                 suffixIcon: IconButton(
@@ -95,56 +99,101 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 }
 
-class WelcomeImgWidget extends StatelessWidget {
-  const WelcomeImgWidget({super.key});
+class WelcomeWidget extends StatefulWidget {
+  const WelcomeWidget({super.key});
+
+  @override
+  State createState() => _WelcomeWidgetState();
+}
+
+class _WelcomeWidgetState extends State<WelcomeWidget> {
+  String? _welcome = "";
+
+  @override
+  void initState() {
+    DateTime dateTime = DateTime.now();
+    setState(() {
+      switch (dateTime.hour) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          _welcome = "还再熬夜呢？比你厉害的人都睡了";
+          break;
+        case 6:
+        case 7:
+        case 8:
+          _welcome = "新的一天，早上好啊，记得吃早饭喔";
+          break;
+        case 9:
+        case 10:
+        case 11:
+          _welcome = "上午好，努力加油吧，冲呀";
+          break;
+        case 12:
+        case 13:
+          _welcome = "中午好，吃午饭了吗";
+          break;
+        case 14:
+        case 15:
+          _welcome = "下午好，中午不睡，下午崩溃";
+        case 16:
+        case 17:
+          _welcome = "下午好，多走动走动，别久坐";
+          break;
+        case 18:
+        case 19:
+          _welcome = "傍晚好，该吃晚饭咯";
+          break;
+        case 20:
+        case 21:
+          _welcome = "晚上好，早点上床休息吧";
+          break;
+        case 22:
+        case 23:
+          _welcome = "晚上好，快休息吧，明天见";
+          break;
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 14, right: 14),
-      child: SizedBox(
-        // width: 322,
-        // height: 196,
-        child: SvgPicture.asset(
-          'images/login.svg',
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-}
-
-class WelcomeWidget extends StatelessWidget {
-  const WelcomeWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 43, top: 57),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '早安',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                '欢迎来到 Young',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF7c7c7c),
-                ),
-              ),
-            ],
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 43),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$_welcome',
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+              color: Colors.black,
+            ),
           ),
-        )
-      ],
+          Container(height: 5,),
+          const Text(
+            '欢迎来到 Young',
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF999999),
+              letterSpacing: 2,
+            ),
+          ),
+          Container(height: 40,),
+          Center(
+            child: SvgPicture.asset(
+              'images/login.svg',
+              width: 322,
+              height: 175,
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -161,7 +210,6 @@ void main() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           WelcomeWidget(),
-          Expanded(child: WelcomeImgWidget()),
           LoginWidget(),
         ],
       ),
