@@ -1,100 +1,195 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:young_lite/common/constant.dart';
 
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({super.key});
-//
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
-//
-// class _LoginPageState extends State<LoginPage> {
-//   String? username;
-//   String? password;
-//
-//   bool showSuccess = false;
-//   SwiperController _swiperController = new SwiperController();
-//
-//   _login() async {
-//     if (username == "" ||
-//         password == "" ||
-//         username == null ||
-//         password == null) {
-//       return;
-//     }
-//     showToast(context)
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-class LoginWidget extends StatefulWidget {
-  const LoginWidget({super.key});
+class LoginSubmitWidget extends StatefulWidget {
+  Function? tap;
+  Color? color;
+  Color? fontColor;
+  String? txt;
+  LoginSubmitWidget({
+    Key? key,
+    this.tap,
+    this.txt,
+    this.color,
+    this.fontColor,
+  }) : super(key: key);
 
   @override
-  State<LoginWidget> createState() => _LoginWidgetState();
+  State createState() => _LoginSubmitWidgetState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _LoginSubmitWidgetState extends State<LoginSubmitWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Bounce(
+      duration: Duration(milliseconds: 80),
+      onPressed: () {
+        if (widget.tap != null) widget.tap!();
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width - 4 * OS_EDGE,
+        margin: EdgeInsets.symmetric(horizontal: OS_EDGE * 2),
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        decoration: BoxDecoration(
+          color: widget.color ?? os_color,
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+        ),
+        child: Center(
+          child: Text(
+            widget.txt ?? "登录",
+            style: TextStyle(
+              color: widget.fontColor ?? os_white,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class UnableLoginWidget extends StatefulWidget {
+  UnableLoginWidget({super.key});
+
+  @override
+  State createState() => _UnableLoginWidgetState();
+}
+
+class _UnableLoginWidgetState extends State<UnableLoginWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      onPressed: () {
+        Navigator.pushNamed(context, "/login_helper");
+      },
+      padding: const EdgeInsets.all(0),
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        padding: EdgeInsets.symmetric(horizontal: OS_EDGE * 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 2.5),
+              child: const Icon(
+                Icons.info_outline,
+                color: Color.fromARGB(255, 129, 129, 129),
+                size: 18,
+              ),
+            ),
+            Container(width: 3),
+            const Text(
+              "无法登录？",
+              style: TextStyle(
+                color: Color.fromARGB(255, 129, 129, 129),
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginInputWidget extends StatefulWidget {
+  Function? change;
+  FocusNode? uFocus;
+  FocusNode? pFocus;
+
+  LoginInputWidget({super.key, this.change, this.uFocus, this.pFocus});
+
+  @override
+  State<LoginInputWidget> createState() => _LoginInputWidgetState();
+}
+
+class _LoginInputWidgetState extends State<LoginInputWidget> {
   bool _blindfold = true;
+
+  TextEditingController uController = new TextEditingController();
+  TextEditingController pController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: const Color(0xFFEEEEEE),
-            ),
-            child: const TextField(
-              decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
-                hintText: '请输入用户名',
-                border: InputBorder.none,
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width - 4 * OS_EDGE,
+          margin: EdgeInsets.symmetric(horizontal: 2 * OS_EDGE, vertical: 7.5),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0x11FFFFFF)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            color: const Color(0x14000000),
+          ),
+          child: TextField(
+            controller: uController,
+            focusNode: widget.uFocus,
+            style: const TextStyle(letterSpacing: 0.5),
+            onChanged: (text) {
+              widget.change!(uController.text, pController.text);
+            },
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderSide: BorderSide(color: Colors.transparent),
               ),
-              style: TextStyle(
-                color: Color(0xFF818181),
+              hintText: '请输入用户名',
+              hintStyle: TextStyle(color: Colors.grey[600]),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
             ),
           ),
-          const SizedBox(
-            height: 8.0,
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width - 4 * OS_EDGE,
+          margin: EdgeInsets.symmetric(horizontal: 2 * OS_EDGE, vertical: 7.5),
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0x11FFFFFF)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            color: const Color(0x14000000),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: const Color(0xFFEEEEEE),
-            ),
-            child: TextField(
-              obscureText: _blindfold,
-              style: const TextStyle(
-                color: Color(0xFF818181),
-              ),
-              decoration: InputDecoration(
-                contentPadding:
-                    const EdgeInsets.only(left: 18.0, top: 18.0, bottom: 18.0),
-                hintText: '请输入密码',
-                border: InputBorder.none,
-                suffixIcon: IconButton(
+          child: TextField(
+            controller: pController,
+            focusNode: widget.pFocus,
+            obscureText: _blindfold,
+            style: const TextStyle(letterSpacing: 0.5),
+            onChanged: (text) {
+              widget.change!(uController.text, pController.text);
+            },
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              enabledBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderSide: BorderSide(color: Colors.transparent)),
+              hintText: '请输入密码',
+              hintStyle: TextStyle(color: Colors.grey[600]),
+              border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: IconButton(
                   onPressed: () {
                     setState(() {
                       _blindfold = !_blindfold;
                     });
                   },
                   icon: Icon(
-                      _blindfold ? Icons.visibility : Icons.visibility_off),
+                    _blindfold ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey[400],
+                  ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        UnableLoginWidget(),
+      ],
     );
   }
 }
@@ -114,14 +209,6 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
     DateTime dateTime = DateTime.now();
     setState(() {
       switch (dateTime.hour) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-          _welcome = "还再熬夜呢？比你厉害的人都睡了";
-          break;
         case 6:
         case 7:
         case 8:
@@ -155,6 +242,9 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
         case 23:
           _welcome = "晚上好，快休息吧，明天见";
           break;
+        default:
+          _welcome = "还再熬夜呢？比你厉害的人都睡了";
+          break;
       }
     });
     super.initState();
@@ -175,7 +265,9 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
               color: Colors.black,
             ),
           ),
-          Container(height: 5,),
+          Container(
+            height: 5,
+          ),
           const Text(
             '欢迎来到 Young',
             style: TextStyle(
@@ -184,7 +276,9 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
               letterSpacing: 2,
             ),
           ),
-          Container(height: 40,),
+          Container(
+            height: 40,
+          ),
           Center(
             child: SvgPicture.asset(
               'images/login.svg',
@@ -205,12 +299,11 @@ void main() {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
     ),
-    home: const Scaffold(
+    home: Scaffold(
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          WelcomeWidget(),
-          LoginWidget(),
+          const WelcomeWidget(),
+          LoginInputWidget(),
         ],
       ),
     ),
