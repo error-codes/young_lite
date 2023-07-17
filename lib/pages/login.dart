@@ -2,49 +2,134 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:young_lite/common/constant.dart';
+import 'package:young_lite/pages/home.dart';
+import 'package:http/http.dart' as http;
 
 class LoginSubmitWidget extends StatefulWidget {
-  Function? tap;
-  Color? color;
-  Color? fontColor;
-  String? txt;
-  LoginSubmitWidget({
-    Key? key,
-    this.tap,
-    this.txt,
-    this.color,
-    this.fontColor,
-  }) : super(key: key);
+  LoginSubmitWidget({super.key});
 
   @override
   State createState() => _LoginSubmitWidgetState();
 }
 
 class _LoginSubmitWidgetState extends State<LoginSubmitWidget> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  void _login() {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    _authenticate(username, password).then((success) {
+      if (success) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('登录失败'),
+              content: Text('用户名或密码不正确'),
+              actions: [
+                TextButton(
+                  child: Text('确定'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }).catchError((error) {
+      // 处理异常情况，例如网络连接失败
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('登录失败'),
+            content: Text('网络连接失败，请检查网络设置'),
+            actions: [
+              TextButton(
+                child: Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }).whenComplete(() {
+      // 完成登录验证，停止加载指示器
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
+  // 用户身份验证函数
+  Future<bool> _authenticate(String username, String password) async {
+    String url = 'http://localhost:1207/user/login';
+    Map<String, String> headers = {'Content-Type': 'application/json'};
+    Map<String, String> body = {'username': username, 'password': password};
+
+    print('准备请求');
+    print(username);
+    print(password);
+    try {
+      var response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+
+      print(response);
+      if (response.statusCode == 200) {
+        // 登录成功，返回 true
+        print(response.body);
+        return true;
+      } else {
+        // 登录失败，返回 false
+        print(response.body);
+        return false;
+      }
+    } catch (e) {
+      // 发生异常，返回 false
+      print('出错了');
+      throw Exception();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Bounce(
-      duration: Duration(milliseconds: 80),
-      onPressed: () {
-        if (widget.tap != null) widget.tap!();
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width - 4 * OS_EDGE,
-        margin: EdgeInsets.symmetric(horizontal: OS_EDGE * 2),
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(
-          color: widget.color ?? os_color,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-        ),
-        child: Center(
-          child: Text(
-            widget.txt ?? "登录",
-            style: TextStyle(
-              color: widget.fontColor ?? os_white,
-              fontSize: 16,
-            ),
+    return Container(
+      width: MediaQuery.of(context).size.width - 4 * OS_EDGE,
+      margin: EdgeInsets.symmetric(horizontal: OS_EDGE * 2),
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LoginInputWidget(
+            uController: _usernameController,
+            pController: _passwordController,
           ),
-        ),
+          _isLoading
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  onPressed: _login,
+                  child: const Text('登录'),
+                ),
+        ],
       ),
     );
   }
@@ -95,11 +180,7 @@ class _UnableLoginWidgetState extends State<UnableLoginWidget> {
 }
 
 class LoginInputWidget extends StatefulWidget {
-  Function? change;
-  FocusNode? uFocus;
-  FocusNode? pFocus;
-
-  LoginInputWidget({super.key, this.change, this.uFocus, this.pFocus});
+  LoginInputWidget({super.key, required uController, required pController});
 
   @override
   State<LoginInputWidget> createState() => _LoginInputWidgetState();
@@ -107,7 +188,6 @@ class LoginInputWidget extends StatefulWidget {
 
 class _LoginInputWidgetState extends State<LoginInputWidget> {
   bool _blindfold = true;
-
   TextEditingController uController = new TextEditingController();
   TextEditingController pController = new TextEditingController();
 
@@ -125,11 +205,7 @@ class _LoginInputWidgetState extends State<LoginInputWidget> {
           ),
           child: TextField(
             controller: uController,
-            focusNode: widget.uFocus,
             style: const TextStyle(letterSpacing: 0.5),
-            onChanged: (text) {
-              widget.change!(uController.text, pController.text);
-            },
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -155,12 +231,8 @@ class _LoginInputWidgetState extends State<LoginInputWidget> {
           ),
           child: TextField(
             controller: pController,
-            focusNode: widget.pFocus,
             obscureText: _blindfold,
             style: const TextStyle(letterSpacing: 0.5),
-            onChanged: (text) {
-              widget.change!(uController.text, pController.text);
-            },
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -303,7 +375,7 @@ void main() {
       body: Column(
         children: [
           const WelcomeWidget(),
-          LoginInputWidget(),
+          LoginSubmitWidget(),
         ],
       ),
     ),
