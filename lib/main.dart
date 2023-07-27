@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:young_lite/pages/home.dart';
+import 'package:young_lite/widgets/icons.dart';
+import 'package:young_lite/widgets/listview.dart';
 
 void main() {
-
   runApp(const MyApp());
 }
 
@@ -17,9 +17,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: LoginPage(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('你好, Flutter'),
+        ),
+        body: const GraphTextListView(),
       ),
     );
   }
 }
+
+
+
+
+
