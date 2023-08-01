@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:young_lite/widgets/gridview.dart';
 import 'package:young_lite/widgets/icons.dart';
 import 'package:young_lite/widgets/listview.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('你好, Flutter'),
         ),
-        body: const GraphTextListView(),
+        body: GridViewWidget(),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:young_lite/fonts/icons.dart';
+
+import '../icons/icons.dart';
 
 class IconWidget extends StatelessWidget {
   const IconWidget({super.key});

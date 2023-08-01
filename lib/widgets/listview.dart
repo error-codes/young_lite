@@ -98,10 +98,62 @@ class GraphTextListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Center(
+      child: ListView(
+        children: [
+          ListTile(
+            leading: Image.asset('images/1.png'),
+            title: const Text('华北黄淮高温雨今起强势登场'),
+            subtitle: const Text('中国天气网讯 21日开始，华北黄淮高温雨今起强势登场'),
+          ),
+          const Divider(),
+          ListTile(
+            leading: Image.asset('images/2.png'),
+            title: const Text('保监局50天开32罚单 “断供”违规资金为房市降温'),
+            subtitle: const Text('中国天气网讯 保监局50天开32罚单 “断供”违规资金为房市降温'),
+          ),
+          const Divider(),
+          ListTile(
+            trailing: Image.asset('images/3.png'),
+            title: const Text('华北黄淮高温雨今起强势登场'),
+            subtitle: const Text('中国天气网讯 21日开始，华北黄淮高温雨今起强势登场'),
+          ),
+          const Divider(),
+          ListTile(
+            leading: Image.asset('images/4.png'),
+            title: const Text('普京现身俄海军节阅兵：乘艇检阅军舰'),
+          ),
+          const Divider(),
+          ListTile(
+            leading: Image.asset('images/5.png'),
+            title: const Text('鸿星尔克捐1个亿帮助困难残疾群体 网友：企业有担当'),
+          ),
+          const Divider(),
+          ListTile(
+            leading: Image.asset('images/6.png'),
+            title: const Text('行业冥灯？老罗最好祈祷苹果的AR能成'),
+          ),
+          const Divider(),
+          ListTile(
+            trailing: Image.asset('images/7.png'),
+            title: const Text('鸿星尔克捐1个亿帮助困难残疾群体 网友：企业有担当'),
+          ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+}
+
+class GraphTextTitleListView extends StatelessWidget {
+  const GraphTextTitleListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(10),
       children: [
-        Image.network('https://www.itying.com/images/flutter/1.png'),
+        Image.asset('images/1.png'),
         Container(
           height: 44,
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -113,8 +165,7 @@ class GraphTextListView extends StatelessWidget {
             ),
           ),
         ),
-
-        Image.network('https://www.itying.com/images/flutter/2.png'),
+        Image.asset('images/2.png'),
         Container(
           height: 44,
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -126,8 +177,7 @@ class GraphTextListView extends StatelessWidget {
             ),
           ),
         ),
-
-        Image.network('https://www.itying.com/images/flutter/3.png'),
+        Image.asset('images/3.png'),
         Container(
           height: 44,
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -139,8 +189,7 @@ class GraphTextListView extends StatelessWidget {
             ),
           ),
         ),
-
-        Image.network('https://www.itying.com/images/flutter/4.png'),
+        Image.asset('images/4.png'),
         Container(
           height: 44,
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -152,8 +201,7 @@ class GraphTextListView extends StatelessWidget {
             ),
           ),
         ),
-
-        Image.network('https://www.itying.com/images/flutter/1.png'),
+        Image.asset('images/1.png'),
         Container(
           height: 44,
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -166,6 +214,106 @@ class GraphTextListView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class HorizontalListView extends StatelessWidget {
+  const HorizontalListView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 180,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Container(
+            width: 90.0,
+            color: Colors.redAccent,
+          ),
+          Container(
+            width: 90.0,
+            color: Colors.orangeAccent,
+            child: Column(
+              children: [
+                Image.asset('images/1.png'),
+                const Text('我说我是一个文本，你信吗？'),
+              ],
+            ),
+          ),
+          Container(
+            width: 90.0,
+            color: Colors.blueAccent,
+          ),
+          Container(
+            width: 90.0,
+            color: Colors.deepOrangeAccent,
+          ),
+          Container(
+            width: 90.0,
+            color: Colors.greenAccent,
+            child: Column(
+              children: [
+                Image.asset('images/2.png'),
+                const Text('我说我是一个按钮，你信吗？'),
+              ],
+            ),
+          ),
+          Container(
+            width: 90.0,
+            color: Colors.deepPurpleAccent,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DynamicListView extends StatelessWidget {
+  List<Widget> widgetList = [];
+  List<String> stringList = [];
+
+  DynamicListView({super.key}) {
+    for (int i = 0; i < 5; i++) {
+      stringList.add('我是第 $i 段文本, 我采用 ListView.builder 实现');
+    }
+  }
+
+  List<Widget> _initListView() {
+    for (int i = 0; i < 5; i++) {
+      widgetList.add(ListTile(
+        title: Text('我是第 $i 段文本, 我采用 for 循环构建 ListTitle 实现'),
+      ));
+    }
+    return widgetList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 189,
+      height: 380,
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: _initListView(),
+            ),
+          ),
+          const Divider(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: stringList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(stringList[index]),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
