@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:young_lite/views/test/search.dart';
+import 'package:young_lite/widgets/button.dart';
 import 'package:young_lite/widgets/gridview.dart';
 import 'package:young_lite/widgets/icons.dart';
 import 'package:young_lite/widgets/listview.dart';
+import 'package:young_lite/widgets/wrap.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('你好, Flutter'),
         ),
-        body: GridViewWidget(),
+        body: const SearchAndHistory(),
       ),
     );
   }
